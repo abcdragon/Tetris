@@ -1,71 +1,60 @@
 # coding = utf-8
 import pygame
 import SelectionMenu
+import DrawAndRemove
 
 pygame.init()
 
-display_width = 1300
-display_height = 800
+Shapes = [(0, 1, 2, 3), (0, 1, 10, 11)]
+moveObject = list()
+Rects = list()
+
+display_width, display_height = 1300, 800
 backgorundColor = (255, 255, 200)
+
+clock = pygame.time
 ourScreen = pygame.display.set_mode((display_width, display_height))
-ourScreen.fill(backgorundColor)
-
-Arduino = SelectionMenu.Selection_Menu(ourScreen, display_width, display_height) # Selection 메뉴 실행
-
-clock = pygame.time.Clock()
 pygame.display.set_caption('테트리스')
+ourScreen.fill(backgorundColor)
 finish = False
 
-Rects = list()
+Arduino = SelectionMenu.Selection_Menu(ourScreen, display_width, display_height) # Selection 메뉴 실행
 
 for i in range(10) :
     for j in range(10):
         Rects.append((j*80, i*80, 80, 80))
         pygame.draw.rect(ourScreen, (0, 0, 0), (j*80, i*80, 80, 80), 4)
 
-
-sampleSprite = pygame.sprite.Sprite()
-sampleSprite.image = pygame.image.load("다운로드.jpg").convert()
-sampleSprite.rect = sampleSprite.image.get_rect()
-sampleSprite.rect.topleft = [0, 0]
-ourScreen.blit(sampleSprite.image, sampleSprite.rect)
-
-colorBlue = True
-
-x, y, degree = 0, 0, 90
+pygame.draw.line(ourScreen, (0, 0, 0), (display_height, 0), (display_height, display_height), 2)
+pygame.display.flip()
 
 while not finish:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finish = not finish
-
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_DELETE:
+                shape = input("Line, Squre 중에서 입력하세요")
+                if shape == "Line":
+                    for i in range(len(Shapes[0])):
+                        #print(Rects[i])
+                        DrawAndRemove.Draw(ourScreen, (0, 0, 0), Rects[i], 0)
+                        moveObject.append(Rects[i])
+                elif shape == "Squre":
+                    for i in range(len(Shapes[1])):
+                        pygame.draw.rect(ourScreen, (0, 0, 0), Rects[i], 0)
 
     temp = str(Arduino.readline()).replace("b\'", "")
     temp = temp.replace("\\r\\n\'", "")
     #print(temp)
 
-    if(temp == "UP"):
-        #print("DEGREE : {}", degree)
-        sampleSprite.image = pygame.transform.rotate(sampleSprite.image, degree)
+    DrawAndRemove.Down(ourScreen, moveObject, backgorundColor)
+    clock.delay(1000)
 
-        if(degree == 270) : degree = 0
-        else : degree = degree + 90
+    if(temp == "DOWN"):
+        DrawAndRemove.Down(ourScreen, moveObject, backgorundColor)
 
-    if(temp == "LEFT"):
-        x = x - 10
-
-    if(temp == "RIGHT"):
-        x = x + 10
-
-    ourScreen.fill(backgorundColor)
-
-    sampleSprite.rect.x = x
-
-    ourScreen.blit(sampleSprite.image, sampleSprite.rect)
-    pygame.draw.line(ourScreen, (0, 0, 0), (display_height, 0), (display_height, display_height), 2)
     pygame.display.flip()
-
-    clock.tick(60)
 
 pygame.quit()
 quit()
