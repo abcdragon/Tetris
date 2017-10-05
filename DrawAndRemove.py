@@ -1,16 +1,22 @@
 import pygame
 
-def Draw(Screen, Color, tempRect, Width):
+def Draw(Screen, moveObject, Color, Width):
     #print(tempRect)
-    pygame.draw.rect(Screen, Color, tempRect, Width)
+    pygame.draw.rect(Screen, Color, moveObject, Width)
 
-def Remove(Screen, Color, tempRect):
-    Draw(Screen, tempRect, Color, 0)
-    Draw(Screen, tempRect, (0, 0, 0), 4)
+def Remove(Screen, moveObject, Color):
+    Draw(Screen, moveObject, Color, 0)
+    Draw(Screen, moveObject, (0, 0, 0), 4)
 
-def Down(Screen, moveObject, backgoundColor):
+def Down(Screen, moveObject, Color):
     for i in range(len(moveObject)):
-        Remove(Screen, backgoundColor, moveObject[i])
-        Draw(Screen, backgoundColor, (moveObject[i][0]+80, moveObject[i][1]+80, moveObject[i][2], moveObject[i][3]), 0)
+        #print("moveObject[i] {}".format(moveObject[i]))
+        Remove(Screen, moveObject[i], Color)
+        #moveObject[i][0] = moveObject[i][0] + 80
+        moveObject[i][1] = moveObject[i][1] + 80
 
-    return
+    for i in range(len(moveObject)):
+        print("moveObject's elements : {}".format(moveObject[i]))
+        Draw(Screen, moveObject[i], (0, 0, 0), 0)
+
+    return moveObject
