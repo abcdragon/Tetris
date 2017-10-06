@@ -11,11 +11,11 @@ def Selection_Menu(ourScreen, display_width, display_height):
     isColored = -1
     pygame.init()
 
-    GameStartPath = ['.\\GameMenu\\GameStart\\GameStart.png',
-            '.\\GameMenu\\GameStart\\GameStartSelecting.png']
+    GameStartPath = ['.\\Texture\\GameStart\\GameStart.png',
+            '.\\Texture\\GameStart\\GameStartSelecting.png']
 
-    OptionPath = ['.\\GameMenu\\Option\\Option.png',
-                  '.\\GameMenu\\Option\\OptionSelecting.png']
+    OptionPath = ['.\\Texture\\Option\\Option.png',
+                  '.\\Texture\\Option\\OptionSelecting.png']
 
     GameStart = pygame.image.load(GameStartPath[0])
     Option = pygame.image.load(OptionPath[0])

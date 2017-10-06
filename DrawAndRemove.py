@@ -1,22 +1,36 @@
 import pygame
 
-def Draw(Screen, moveObject, Color, Width):
-    #print(tempRect)
-    pygame.draw.rect(Screen, Color, moveObject, Width)
+Black = (0, 0, 0)
 
-def Remove(Screen, moveObject, Color):
-    Draw(Screen, moveObject, Color, 0)
-    Draw(Screen, moveObject, (0, 0, 0), 4)
+class Drawing:
+    DrawScreen, MoveObject, Image = None, None, None
 
-def Down(Screen, moveObject, Color):
-    for i in range(len(moveObject)):
-        #print("moveObject[i] {}".format(moveObject[i]))
-        Remove(Screen, moveObject[i], Color)
-        #moveObject[i][0] = moveObject[i][0] + 80
-        moveObject[i][1] = moveObject[i][1] + 80
+    def __init__(self, _DrawScreen, _MoveObject, _Image):
+        self.DrawScreen = _DrawScreen
+        self.MoveObject = _MoveObject
+        self.Image = _Image
 
-    for i in range(len(moveObject)):
-        print("moveObject's elements : {}".format(moveObject[i]))
-        Draw(Screen, moveObject[i], (0, 0, 0), 0)
+    def Draw(self):
+        #print(tempRect)
+        pygame.draw.rect(self.DrawScreen, Black, self.MoveObject, 0)
 
-    return moveObject
+    def Remove(self):
+        self.DrawScreen.blit(self.Image, (0, 0))
+
+    def Down(self):
+        print("this is DrawAndRemove : {}".format(self.MoveObject))
+        self.MoveObject[1] += 40
+
+        self.Remove()
+        self.Draw()
+
+        return self.MoveObject
+
+    def Side(self, IsLeft):
+        if(IsLeft) : self.MoveObject[0] -= 40
+        else : self.MoveObject[0] += 40
+
+        self.Remove()
+        self.Draw()
+
+        return self.MoveObject
