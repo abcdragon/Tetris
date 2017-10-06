@@ -27,10 +27,13 @@ class Drawing:
         return self.MoveObject
 
     def Side(self, IsLeft):
-        if(IsLeft) : self.MoveObject[0] -= 40
-        else : self.MoveObject[0] += 40
+        if IsLeft and self.MoveObject[0] > 0  : self.MoveObject[0] -= 40
+        if not IsLeft and self.MoveObject[0] <= 280 : self.MoveObject[0] += 40
 
         self.Remove()
         self.Draw()
 
         return self.MoveObject
+
+    def turn(self):
+        pass # 블럭 회전

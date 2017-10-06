@@ -5,7 +5,7 @@ import DrawAndRemove
 
 pygame.init()
 
-Shapes = [[0, 0, 40, 160], [0, 0, 80, 80]]
+Shapes = [[0, 0, 160, 40], [0, 0, 80, 80]]
 inputShape = ""
 moveObject = list()
 Rects = list()
