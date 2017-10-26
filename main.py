@@ -2,12 +2,18 @@
 import pygame
 import SelectionMenu
 import DrawAndRemove
+import CustomSpr
 
 pygame.init()
 
-Shapes = [[0, 0, 160, 40], [0, 0, 80, 80]]
+Shapes = [ ".\\Texture\\Block\\Block1.png",
+           ".\\Texture\\Block\\Block2.png",
+           ".\\Texture\\Block\\Block3.png",
+           ".\\Texture\\Block\\Block4.png",
+           ".\\Texture\\Block\\Block5.png"  ]
+
 inputShape = ""
-moveObject = list()
+moveObject = None
 Rects = list()
 
 display_width, display_height = 800, 800
@@ -20,6 +26,8 @@ pygame.display.set_caption('테트리스')
 ourScreen.fill(backgorundColor)
 finish = False
 Moving = None
+
+downFlag = 0
 
 #Arduino = SelectionMenu.Selection_Menu(ourScreen, display_width, display_height) # Selection 메뉴 실행
 
@@ -50,11 +58,17 @@ while not finish:
                 if inputShape == "Line": idx = 0
                 elif inputShape == "Squre": idx = 1
 
+                moveObjectSrc = Shapes[idx]
+
+                moveObject = CustomSpr.SimpleSprite(moveObjectSrc, (0, 0))
+
+                '''print(Moving is None)
+
                 #print(Rects[i])
                 moveObject = Shapes[idx]
                 Moving = DrawAndRemove.Drawing(ourScreen, moveObject, GameBoard)
                 Moving.Draw()
-                print(moveObject)
+                print(moveObject)'''
 
             if event.key == pygame.K_ESCAPE:
                 finish = not finish
@@ -63,15 +77,21 @@ while not finish:
     #temp = temp.replace("\\r\\n\S
     #print(temp)
 
-    if(len(moveObject) > 0):
-        moveObject = Moving.Down()
-
-        if(inputShape == "Squre"):
-            if(moveObject[1] >= 720):
+    if(downFlag and moveObject is not None):
+        temp = list(moveObject.get_Rect())
+        temp[1] += 40
+        moveObject.update(0, [temp[0], temp[1]])
+        '''if(inputShape == "Squre" or inputShape == "Line"):
+            if(moveObject[1] > 720):
+                print("Limit")
                 moveObject = list()
                 Moving = None
+                downFlag = not downFlag'''
 
-    clock.delay(400)
+    clock.delay(700)
+
+    if not downFlag:
+        downFlag = not downFlag
 
     #if(temp == "DOWN"):
         #DrawAndRemove.Down(ourScreen, moveObject, backgorundColor)

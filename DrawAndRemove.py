@@ -35,5 +35,14 @@ class Drawing:
 
         return self.MoveObject
 
+    def Background(self):
+        '''
+
+
+
+        :return:
+        '''
+        pass
+
     def turn(self):
         pass # 블럭 회전
