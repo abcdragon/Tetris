@@ -14,10 +14,11 @@ Shapes = [ ".\\Texture\\Block\\Block1.png",
 
 inputShape = ""
 moveObject = None
+moveObjectGroup = None
 Rects = list()
 
 display_width, display_height = 800, 800
-backgorundColor = (255, 255, 200)
+backgorundColor = (255, 255, 200, 255)
 GameBoard = pygame.image.load('.\\Texture\\Background\\Background_Image.jpg')
 
 clock = pygame.time
@@ -27,30 +28,27 @@ ourScreen.fill(backgorundColor)
 finish = False
 Moving = None
 
-downFlag = 0
+BlockData = list()
 
 #Arduino = SelectionMenu.Selection_Menu(ourScreen, display_width, display_height) # Selection 메뉴 실행
 
-ourScreen.blit(GameBoard, (0, 0))
 pygame.display.update()
-'''for i in range(10) :
-    for j in range(10):
-        Rects.append([j*80, i*80, 80, 80])
-        pygame.draw.rect(ourScreen, (0, 0, 0), (j*80, i*80, 80, 80), 4)
-
-print(Rects)'''
 
 while not finish:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finish = not finish
         if event.type == pygame.KEYDOWN:
-            if Moving is not None and event.key == pygame.K_RIGHT:
-                moveObject = Moving.Side(False)
-                print("Clicked!")
-            if Moving is not None and event.key == pygame.K_LEFT:
-                moveObject = Moving.Side(True)
-                print("Clicked!")
+            if not (moveObject is None) :
+                if event.key == pygame.K_RIGHT:
+                    if moveObject.rect.x < 400 :
+                        moveObject.rect.x += 40
+                    print("Right Clicked!")
+
+                if event.key == pygame.K_LEFT:
+                    if moveObject.rect.x > 0 :
+                        moveObject.rect.x -= 40
+                    print("Left Clicked!")
 
             if event.key == pygame.K_DELETE:
                 inputShape = input("Line, Squre 중에서 입력하세요")
@@ -61,6 +59,7 @@ while not finish:
                 moveObjectSrc = Shapes[idx]
 
                 moveObject = CustomSpr.SimpleSprite(moveObjectSrc, (0, 0))
+                moveObjectGroup = pygame.sprite.RenderPlain(moveObject)
 
                 '''print(Moving is None)
 
@@ -77,26 +76,26 @@ while not finish:
     #temp = temp.replace("\\r\\n\S
     #print(temp)
 
-    if(downFlag and moveObject is not None):
-        temp = list(moveObject.get_Rect())
-        temp[1] += 40
-        moveObject.update(0, [temp[0], temp[1]])
-        '''if(inputShape == "Squre" or inputShape == "Line"):
-            if(moveObject[1] > 720):
-                print("Limit")
-                moveObject = list()
-                Moving = None
-                downFlag = not downFlag'''
+    if(moveObject is not None):
+        if(moveObject.rect.y > 760):
+            for i in range(1, 21):
+                for j in range(1, 11):
+                    x = 40 * j - 20
+                    y = 40 * i - 20
+                    getColor = ourScreen.get_at((x, y))
+                    if getColor != backgorundColor :
+                        print(getColor)
+            print("Limit")
+            moveObject = None
+            Moving = None
+        else :
+            moveObject.rect.y += 40
+            ourScreen.fill(backgorundColor)
+            moveObjectGroup.draw(ourScreen)
 
-    clock.delay(700)
+    clock.delay(400)
 
-    if not downFlag:
-        downFlag = not downFlag
-
-    #if(temp == "DOWN"):
-        #DrawAndRemove.Down(ourScreen, moveObject, backgorundColor)
-
-    pygame.display.update()
+    pygame.display.flip()
 
 pygame.quit()
 quit()
