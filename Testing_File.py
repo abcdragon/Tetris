@@ -1,24 +1,6 @@
-import pygame
-import CustomSpr
+for i in range( 1, 21 ):
+    for j in range( 1, 11 ):
+        x = 820 - 40 * j
+        y = 820 - 40 * i
 
-pygame.init()
-
-screen = pygame.display.set_mode((300, 300))
-
-pygame.display.set_caption('테트리스')
-screen.fill((255, 255, 255))
-
-
-simple = CustomSpr.SimpleSprite(".\\Texture\\Block\\Block1.png", (0, 0))
-simple_group = pygame.sprite.RenderPlain(simple)
-
-
-finish = False
-
-while not finish:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            finish = not finish
-
-    simple_group.draw(screen)
-    pygame.display.update()
+        print(x, y)

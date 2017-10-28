@@ -18,7 +18,7 @@ moveObjectGroup = None
 Rects = list()
 
 display_width, display_height = 800, 800
-backgorundColor = (255, 255, 200, 255)
+backgorundColor = [255, 255, 200, 255]
 GameBoard = pygame.image.load('.\\Texture\\Background\\Background_Image.jpg')
 
 clock = pygame.time
@@ -29,8 +29,11 @@ finish = False
 Moving = None
 
 BlockData = list()
+mapState = []
 
 #Arduino = SelectionMenu.Selection_Menu(ourScreen, display_width, display_height) # Selection 메뉴 실행
+
+mapState = [[0 for i in range(10)] for j in range(20)]
 
 pygame.display.update()
 
@@ -51,10 +54,7 @@ while not finish:
                     print("Left Clicked!")
 
             if event.key == pygame.K_DELETE:
-                inputShape = input("Line, Squre 중에서 입력하세요")
-                idx = 0
-                if inputShape == "Line": idx = 0
-                elif inputShape == "Squre": idx = 1
+                idx = int(input("0 ~ 4를 입력 : "))
 
                 moveObjectSrc = Shapes[idx]
 
@@ -77,21 +77,45 @@ while not finish:
     #print(temp)
 
     if(moveObject is not None):
-        if(moveObject.rect.y > 760):
+        nowImageSize = moveObject.user_src_image.get_size()
+        if(moveObject.rect.y >= (800 - nowImageSize[1])) :
             for i in range(1, 21):
+                cnt = 0
+
                 for j in range(1, 11):
-                    x = 40 * j - 20
-                    y = 40 * i - 20
-                    getColor = ourScreen.get_at((x, y))
-                    if getColor != backgorundColor :
-                        print(getColor)
+                    x = -40 * j + 420
+                    y = -40 * i + 820
+                    getColor = list(ourScreen.get_at((x, y)))
+
+                    #print(getColor, end = ' ')
+                    if not ( getColor == backgorundColor ):
+                        mapState[i-1][10-j] = 1
+                        #print(getColor)
+
+                    else :
+                        cnt += 1
+
+                if cnt == 10:
+                    #print("i : ", i)
+                    break
+
             print("Limit")
             moveObject = None
             Moving = None
+
+            '''for i in range(20):
+                for j in range(10):
+                    print(mapState[i][j], end = ' ')
+
+                print()'''
+
+            # TODO 1. mapState의 값이 1인 애들은 40x40의 크기로 스프라이트를 생성후 그룹으로 묶기
+            # TODO 2. 충돌 이벤트 만들기
         else :
             moveObject.rect.y += 40
             ourScreen.fill(backgorundColor)
             moveObjectGroup.draw(ourScreen)
+
 
     clock.delay(400)
 
