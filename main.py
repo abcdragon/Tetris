@@ -17,7 +17,7 @@ moveObject = None
 moveObjectGroup = None
 Rects = list()
 
-display_width, display_height = 800, 800
+display_width, display_height = 400, 800
 backgorundColor = [255, 255, 200, 255]
 GameBoard = pygame.image.load('.\\Texture\\Background\\Background_Image.jpg')
 
@@ -31,20 +31,19 @@ Moving = None
 BlockData = list()
 mapState = []
 
-#Arduino = SelectionMenu.Selection_Menu(ourScreen, display_width, display_height) # Selection 메뉴 실행
-
 mapState = [[0 for i in range(10)] for j in range(20)]
 
 pygame.display.update()
+nowImageSize = list() # 이미지 이동제한
 
 while not finish:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finish = not finish
         if event.type == pygame.KEYDOWN:
-            if not (moveObject is None) :
+            if not (moveObject is None ) and len(nowImageSize) != 0 :
                 if event.key == pygame.K_RIGHT:
-                    if moveObject.rect.x < 400 :
+                    if moveObject.rect.x < (400 - nowImageSize[0]) :
                         moveObject.rect.x += 40
                     print("Right Clicked!")
 
@@ -60,6 +59,9 @@ while not finish:
 
                 moveObject = CustomSpr.SimpleSprite(moveObjectSrc, (0, 0))
                 moveObjectGroup = pygame.sprite.RenderPlain(moveObject)
+                nowImageSize = moveObject.user_src_image.get_size()
+
+                print(nowImageSize)
 
                 '''print(Moving is None)
 
@@ -76,8 +78,7 @@ while not finish:
     #temp = temp.replace("\\r\\n\S
     #print(temp)
 
-    if(moveObject is not None):
-        nowImageSize = moveObject.user_src_image.get_size()
+    if not (moveObject is None) and len(nowImageSize) != 0 :
         if(moveObject.rect.y >= (800 - nowImageSize[1])) :
             for i in range(1, 21):
                 cnt = 0
