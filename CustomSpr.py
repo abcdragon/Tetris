@@ -7,7 +7,7 @@ class SimpleSprite( pygame.sprite.Sprite ):
         self.user_position = position  # 스프라이트의 위치를 저장할 사용자 변수
         self.user_rotation = 0  # 스프라이트의 회전 각도를 저장할 사용자 변수
         self.image = self.user_src_image
-        self.rect = self.user_src_image.get_rect()
+        self.rect = self.image.get_rect()
 
     def update(self, rotation, position):  # 스프라이트의 상태를 업데이트 하는 함수. 필요에 따라 파라미터가 추가될 수도 있다.
         self.user_position = position
@@ -21,6 +21,13 @@ class SimpleSprite( pygame.sprite.Sprite ):
         self.rect = self.image.get_rect()
         self.rect.center = self.user_position  # 이미지의 출력 위치를 정한다
 
-        print("rect.center : ", self.rect.center)
+class BlockSprite(pygame.sprite.Sprite):
+    def __init__(self, image, position):
+        pygame.sprite.Sprite.__init__( self )
+        self.image = pygame.image.load( image )
+        self.position = position
+
+        self.rect = self.image.get_rect()
+        self.rect.center = position
 
 #출처: http: // devnauts.tistory.com / 63[devnauts]
